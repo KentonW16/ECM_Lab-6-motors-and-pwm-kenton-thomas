@@ -105,6 +105,15 @@ void turnRight(DC_motor *mL, DC_motor *mR)
 //function to make the robot go straight
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR)
 {
-
+    mL->direction = 1;
+    mR->direction = 1;
+    int cur_power;
+    for (cur_power=1;cur_power<21;cur_power++) {
+        mL->power = cur_power;
+        mR->power = cur_power;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(10);
+    }
 }
 
