@@ -16,15 +16,21 @@ void main(void){
     TRISCbits.TRISC5=0; //set TRIS value for pin (output)
     Timer0_init();
     Interrupts_init();
+    
+    int angle = -90;
 
     while(1){
 		//write your code to call angle2PWM() to set the servo angle
-        angle2PWM(0);
-        __delay_ms(500);
-        angle2PWM(-45);
-        __delay_ms(500);
-        angle2PWM(45);
-        __delay_ms(500);
+        while(angle<90) {
+            angle2PWM(angle);
+            __delay_ms(50);
+            angle++;
+        }
+        while(angle>-90) {
+            angle2PWM(angle);
+            __delay_ms(50);
+            angle--;
+        }
 
     }
 }

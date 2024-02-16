@@ -41,7 +41,7 @@ void Timer0_init(void)
     T0CON1bits.T0ASYNC=1; // see datasheet errata - needed to ensure correct operation when Fosc/4 used as clock source
     //1 degree is equivalent to 5.55us
     //with ps = 8, timer tick = 0.5us
-    T0CON1bits.T0CKPS=0011; // (=8) need to work out prescaler to produce a timer tick corresponding to 1 deg angle change
+    T0CON1bits.T0CKPS=0b0011; // (=8) need to work out prescaler to produce a timer tick corresponding to 1 deg angle change
     T0CON0bits.T016BIT=1;	//16bit mode	
 	
     // it's a good idea to initialise the timer so that it initially overflows after 20 ms
@@ -66,6 +66,7 @@ void write16bitTMR0val(unsigned int tmp)
  * off_period is the remaining time left (calculate from on_period and T_PERIOD)
 ************************************/
 void angle2PWM(int angle){
-    on_period = 2000 + (angle + 90)*11;	//avoid floating point numbers and be careful of calculation order...
+    on_period = 1100 + (angle + 90)*20;	//calibrated
+    //on_period = 2000 + (angle + 90)*18; //from calculation
     off_period = T_PERIOD - on_period;
 }
