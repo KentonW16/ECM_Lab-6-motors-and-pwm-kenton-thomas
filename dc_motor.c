@@ -5,6 +5,15 @@
 void initDCmotorsPWM(unsigned int PWMperiod){
     //initialise your TRIS and LAT registers for PWM  
     
+    LATEbits.LATE2=0;   //set initial output state
+    TRISEbits.TRISE2=0; //set TRIS value for pin (output)
+    LATEbits.LATE4=0;   //set initial output state
+    TRISEbits.TRISE4=0; //set TRIS value for pin (output)
+    LATCbits.LATC7=0;   //set initial output state
+    TRISCbits.TRISC7=0; //set TRIS value for pin (output)
+    LATGbits.LATG6=0;   //set initial output state
+    TRISGbits.TRISG6=0; //set TRIS value for pin (output)
+    
     //configure PPS to map CCP modules to pins
     RE2PPS=0x05; //CCP1 on RE2
     RE4PPS=0x06; //CCP2 on RE4
@@ -12,13 +21,13 @@ void initDCmotorsPWM(unsigned int PWMperiod){
     RG6PPS=0x08; //CCP4 on RG6
 
     // timer 2 config
-    T2CONbits.CKPS=???; // 1:??? prescaler
+    T2CONbits.CKPS=0b011; // 1:8 prescaler
     T2HLTbits.MODE=0b00000; // Free Running Mode, software gate only
     T2CLKCONbits.CS=0b0001; // Fosc/4
 
     // Tpwm*(Fosc/4)/prescaler - 1 = PTPER
-    // 0.0001s*16MHz/16 -1 = 99
-    T2PR=??; //Period reg 10kHz base period
+    // 0.0001s*16MHz/8 -1 = 199
+    T2PR=PWMperiod; //Period reg 10kHz base period
     T2CONbits.ON=1;
     
     //setup CCP modules to output PMW signals

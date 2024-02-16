@@ -7,28 +7,34 @@
 #pragma config WDTE = OFF        // WDT operating mode (WDT enabled regardless of sleep)
 
 #include <xc.h>
-#include "rc_servo.h"
-#include "ADC.h"
+#include "dc_motor.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
-    LATCbits.LATC5=0;   //set initial output state
-    TRISCbits.TRISC5=0; //set TRIS value for pin (output)
-    ADC_init();
-    Timer0_init();
-    Interrupts_init();
     
-    signed int angle;
-    unsigned int LDR_val;
-    unsigned int ang_change;
+    unsigned int PWMcycle = 199;
+    initDCmotorsPWM(PWMcycle);
+    
+    struct DC_motor motorL, motorR; 		//declare two DC_motor structures 
 
+    motorL.power=0; 						//zero power to start
+    motorL.direction=1; 					//set default motor direction
+    motorL.brakemode=1;						// brake mode (slow decay)
+    motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);  //store address of CCP1 duty high byte
+    motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);  //store address of CCP2 duty high byte
+    motorL.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
+
+    motorR.power=0; 						//zero power to start
+    motorR.direction=1; 					//set default motor direction
+    motorR.brakemode=1;						// brake mode (slow decay)
+    motorR.posDutyHighByte=(unsigned char *)(&CCPR3H);  //store address of CCP1 duty high byte
+    motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP2 duty high byte
+    motorR.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
+    
     while(1){
-		LDR_val = ADC_getval();
-        ang_change = (LDR_val);   //for calibration
-        angle = -90 + ang_change; //set angle dependent on LDR val (-90 dark, 90 light)
-        angle2PWM(angle); 
-        __delay_ms(100);
-
+        
+        stop(&motorL,&motorR);
+		
     }
 }
