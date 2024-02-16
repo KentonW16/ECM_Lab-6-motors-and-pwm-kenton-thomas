@@ -8,29 +8,27 @@
 
 #include <xc.h>
 #include "rc_servo.h"
+#include "ADC.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
     LATCbits.LATC5=0;   //set initial output state
     TRISCbits.TRISC5=0; //set TRIS value for pin (output)
+    ADC_init();
     Timer0_init();
     Interrupts_init();
     
-    int angle = -90;
+    signed int angle;
+    unsigned int LDR_val;
+    unsigned int ang_change;
 
     while(1){
-		//write your code to call angle2PWM() to set the servo angle
-        while(angle<90) {
-            angle2PWM(angle);
-            __delay_ms(50);
-            angle++;
-        }
-        while(angle>-90) {
-            angle2PWM(angle);
-            __delay_ms(50);
-            angle--;
-        }
+		LDR_val = ADC_getval();
+        ang_change = (LDR_val);   //for calibration
+        angle = -90 + ang_change; //set angle dependent on LDR val (-90 dark, 90 light)
+        angle2PWM(angle); 
+        __delay_ms(100);
 
     }
 }
