@@ -32,10 +32,23 @@ void main(void){
     motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP2 duty high byte
     motorR.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
     
-    //setMotorPWM(&motorL);
+    setMotorPWM(&motorL);
     fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnRight(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
     
     while(1){
-		
+		//turnRight(&motorL,&motorR);
+        //__delay_ms(1000);
+        
     }
+    
 }
