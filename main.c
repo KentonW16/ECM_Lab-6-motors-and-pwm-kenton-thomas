@@ -33,6 +33,38 @@ void main(void){
     motorR.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
     
     setMotorPWM(&motorL);
+    
+    __delay_ms(500);
+    
+    // square turning left
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
+    __delay_ms(200);
+    turnLeft(&motorL,&motorR);
+    __delay_ms(200);
+    
+    // square turning right
     fullSpeedAhead(&motorL,&motorR);
     __delay_ms(100);
     stop(&motorL,&motorR);
@@ -43,7 +75,22 @@ void main(void){
     __delay_ms(100);
     stop(&motorL,&motorR);
     __delay_ms(200);
-    turnLeft(&motorL,&motorR);
+    turnRight(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnRight(&motorL,&motorR);
+    __delay_ms(200);
+    fullSpeedAhead(&motorL,&motorR);
+    __delay_ms(100);
+    stop(&motorL,&motorR);
+    __delay_ms(200);
+    turnRight(&motorL,&motorR);
+    __delay_ms(200);
+    turnRight(&motorL,&motorR);
+    __delay_ms(200);
     
     while(1){
 		//turnRight(&motorL,&motorR);

@@ -103,7 +103,7 @@ void turnLeft(DC_motor *mL, DC_motor *mR)
     mL->direction = 0;
     mR->direction = 1;
     int cur_power;
-    for (cur_power=1;cur_power<=33;cur_power++) {
+    for (cur_power=1;cur_power<=35;cur_power++) {
         mL->power = cur_power;
         mR->power = cur_power;
         setMotorPWM(mL);
@@ -111,7 +111,7 @@ void turnLeft(DC_motor *mL, DC_motor *mR)
         __delay_ms(20);
     }
     
-    for (cur_power=33;cur_power>=0;cur_power--) {
+    for (cur_power=35;cur_power>=0;cur_power--) {
         mL->power = cur_power;
         mR->power = cur_power;
         setMotorPWM(mL);
@@ -126,7 +126,7 @@ void turnRight(DC_motor *mL, DC_motor *mR)
     mL->direction = 1;
     mR->direction = 0;
     int cur_power;
-    for (cur_power=1;cur_power<=33;cur_power++) {
+    for (cur_power=1;cur_power<=35;cur_power++) {
         mL->power = cur_power;
         mR->power = cur_power;
         setMotorPWM(mL);
@@ -134,7 +134,7 @@ void turnRight(DC_motor *mL, DC_motor *mR)
         __delay_ms(20);
     }
     
-    for (cur_power=33;cur_power>=0;cur_power--) {
+    for (cur_power=35;cur_power>=0;cur_power--) {
         mL->power = cur_power;
         mR->power = cur_power;
         setMotorPWM(mL);
@@ -149,7 +149,7 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR)
     mL->direction = 1;
     mR->direction = 1;
     int cur_power;
-    for (cur_power=1;cur_power<=80;cur_power++) {
+    for (cur_power=1;cur_power<=60;cur_power++) {
         mL->power = cur_power;
         mR->power = cur_power;
         setMotorPWM(mL);
