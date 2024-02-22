@@ -15,9 +15,16 @@ void main(void){
     Timer0_init();
     Interrupts_init();
 	//don't forget TRIS for your output!
+    TRISAbits.TRISA1=0; //Set pin A1 for output
+    
+    signed int angle=0;
 
     while(1){
 		//write your code to call angle2PWM() to set the servo angle
-
+        if (angle>90) {angle=-90;}
+        angle2PWM(angle);
+        angle++;
+        
+        __delay_ms(50);
     }
 }
