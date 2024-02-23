@@ -32,9 +32,13 @@ void main(void){
     motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP2 duty high byte
     motorR.PWMperiod=PWMcycle;              //store PWMperiod for motor (value of T2PR in this case)
     
-    setMotorPWM(&motorL);
     
+    //wait for button press
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin  
+    while (PORTFbits.RF2);
     __delay_ms(500);
+    
     
     // square turning left
     fullSpeedAhead(&motorL,&motorR);
@@ -92,8 +96,10 @@ void main(void){
     turnRight(&motorL,&motorR);
     __delay_ms(200);
     
+    
     while(1){
-		//turnRight(&motorL,&motorR);
+		//to calibrate turning
+        //turnRight(&motorL,&motorR);
         //__delay_ms(1000);
         
     }
