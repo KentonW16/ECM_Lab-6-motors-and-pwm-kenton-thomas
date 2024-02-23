@@ -8,6 +8,9 @@
 
 #include <xc.h>
 #include "rc_servo.h"
+#include "ADC.h"
+#include "LCD.h"
+
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
@@ -16,15 +19,24 @@ void main(void){
     Interrupts_init();
 	//don't forget TRIS for your output!
     TRISAbits.TRISA1=0; //Set pin A1 for output
-    
-    signed int angle=0;
 
-    while(1){
-		//write your code to call angle2PWM() to set the servo angle
-        if (angle>90) {angle=-90;}
-        angle2PWM(angle);
-        angle++;
+    //Similar to main of Lab 4, to display current LDR voltage on LCD for easy calibration
+    LCD_Init(); 
+    ADC_init();
+	
+	LCD_setline(1); //Set Line 1
+    
+    unsigned int val=0;  
+    signed int angle=0;
+    char buf[40]; //set buf as array
+    
+    while (1) {
+        val = ADC_getval(); // get ADC value
+        ADC2String(buf, val); // get string of ADC value
+        LCD_sendstring(buf); // send string to LCD
         
-        __delay_ms(50);
+        if (val>150) {angle=90;} //Set threshold by testing manually for ambient light
+        else {angle=-90;}
+        angle2PWM(angle);
     }
 }

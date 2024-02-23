@@ -30,6 +30,7 @@ void __interrupt(high_priority) HighISR()
         }
     }
     PIR0bits.TMR0IF=0; 
+ 
 }
 
 /************************************
