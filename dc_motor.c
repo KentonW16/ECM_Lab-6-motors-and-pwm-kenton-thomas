@@ -88,7 +88,17 @@ void setMotorPWM(DC_motor *m)
 //function to stop the robot gradually 
 void stop(DC_motor *mL, DC_motor *mR)
 {
-
+    //Loop to slowly decrease motor power
+    int cur_power;
+    for (cur_power=mL->power;cur_power>=0;cur_power--){
+        
+        mL->power=cur_power; 						//change motor power in structure
+        mR->power=cur_power;
+        
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(20);
+    }
 }
 
 //function to make the robot turn left 
@@ -106,6 +116,21 @@ void turnRight(DC_motor *mL, DC_motor *mR)
 //function to make the robot go straight
 void fullSpeedAhead(DC_motor *mL, DC_motor *mR)
 {
+    mL->direction=1; 						//Ensure direction is set to forward
+    mR->direction=1;
+    
+    //Loop to slowly increase motor power
+    int cur_power=0;
+    for (cur_power=0;cur_power<=100;cur_power++){
+        mL->power=cur_power; 						//change motor power in structure
+        mR->power=cur_power;
+        
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(10);
 
+    }
+
+    
 }
 

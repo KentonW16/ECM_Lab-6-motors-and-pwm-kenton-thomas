@@ -34,7 +34,23 @@ void main(void){
     motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP4 duty high byte
     motorR.PWMperiod=PWMcycle;
 
+    // setup pin for input (connected to button)
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input) BUTTON 1
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin 
     
+    while (PORTFbits.RF2); //Wait for button press to execute movement
+    __delay_ms(300);
     
+    fullSpeedAhead(&motorL, &motorR);
+    __delay_ms(200);
+    
+    //Turn light on and off to debug
+    LATHbits.LATH3=0;   //set initial output state
+    TRISHbits.TRISH3=0; //set TRIS value for pin (output)
+    LATHbits.LATH3=1;
+    
+    stop(&motorL, &motorR);
+    LATHbits.LATH3=0;
+    __delay_ms(200);
     
 }
