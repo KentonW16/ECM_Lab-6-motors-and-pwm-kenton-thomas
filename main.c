@@ -7,36 +7,34 @@
 #pragma config WDTE = OFF        // WDT operating mode (WDT enabled regardless of sleep)
 
 #include <xc.h>
-#include "rc_servo.h"
-#include "ADC.h"
-#include "LCD.h"
+#include "dc_motor.h"
+
+
 
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void){
-    Timer0_init();
-    Interrupts_init();
-	//don't forget TRIS for your output!
-    TRISAbits.TRISA1=0; //Set pin A1 for output
+    int PWMcycle=99; // 0.0001s*16MHz/16 -1 = 99
+    initDCmotorsPWM(PWMcycle);
+       
+    struct DC_motor motorL, motorR; 		//declare two DC_motor structures 
 
-    //Similar to main of Lab 4, to display current LDR voltage on LCD for easy calibration
-    LCD_Init(); 
-    ADC_init();
-	
-	LCD_setline(1); //Set Line 1
+    motorL.power=0; 						//zero power to start
+    motorL.direction=1; 					//set default motor direction
+    motorL.brakemode=1;						// brake mode (slow decay)
+    motorL.posDutyHighByte=(unsigned char *)(&CCPR1H);  //store address of CCP1 duty high byte
+    motorL.negDutyHighByte=(unsigned char *)(&CCPR2H);  //store address of CCP2 duty high byte
+    motorL.PWMperiod=PWMcycle;
+
+    motorR.power=0; 						//zero power to start
+    motorR.direction=1; 					//set default motor direction
+    motorR.brakemode=1;						// brake mode (slow decay)
+    motorR.posDutyHighByte=(unsigned char *)(&CCPR3H);  //store address of CCP3 duty high byte
+    motorR.negDutyHighByte=(unsigned char *)(&CCPR4H);  //store address of CCP4 duty high byte
+    motorR.PWMperiod=PWMcycle;
+
     
-    unsigned int val=0;  
-    signed int angle=0;
-    char buf[40]; //set buf as array
     
-    while (1) {
-        val = ADC_getval(); // get ADC value
-        ADC2String(buf, val); // get string of ADC value
-        LCD_sendstring(buf); // send string to LCD
-        
-        if (val>150) {angle=90;} //Set threshold by testing manually for ambient light
-        else {angle=-90;}
-        angle2PWM(angle);
-    }
+    
 }

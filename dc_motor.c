@@ -2,8 +2,17 @@
 #include "dc_motor.h"
 
 // function initialise T2 and CCP for DC motor control
-void initDCmotorsPWM(unsigned int PWMperiod){
-    //initialise your TRIS and LAT registers for PWM  
+void initDCmotorsPWM(int PWMperiod){
+    //initialise your TRIS and LAT registers for PWM 
+    TRISEbits.TRISE2=0; //set TRIS value for pin (output)
+    TRISEbits.TRISE4=0;
+    TRISCbits.TRISC7=0;
+    TRISGbits.TRISG6=0;
+    
+    LATEbits.LATE2=0; //set initial output state
+    LATEbits.LATE4=0;
+    LATCbits.LATC7=0;
+    LATGbits.LATG6=0;
     
     //configure PPS to map CCP modules to pins
     RE2PPS=0x05; //CCP1 on RE2
@@ -12,13 +21,14 @@ void initDCmotorsPWM(unsigned int PWMperiod){
     RG6PPS=0x08; //CCP4 on RG6
 
     // timer 2 config
-    T2CONbits.CKPS=???; // 1:??? prescaler
+    T2CONbits.CKPS=0b0100; // 1:16 prescaler (See calculation below)
     T2HLTbits.MODE=0b00000; // Free Running Mode, software gate only
     T2CLKCONbits.CS=0b0001; // Fosc/4
 
     // Tpwm*(Fosc/4)/prescaler - 1 = PTPER
-    // 0.0001s*16MHz/16 -1 = 99
-    T2PR=??; //Period reg 10kHz base period
+    // 0.0001s*16MHz/16 -1 = 99, set in main.c code and passed into this function
+    // T2PR is period register, and has max value of 255, timer resets when reach this value
+    T2PR=PWMperiod; //Period reg 10kHz base period
     T2CONbits.ON=1;
     
     //setup CCP modules to output PMW signals
