@@ -99,18 +99,59 @@ void stop(DC_motor *mL, DC_motor *mR)
         setMotorPWM(mR);
         __delay_ms(20);
     }
+    LATHbits.LATH3=!LATHbits.LATH3;
 }
 
 //function to make the robot turn left 
 void turnLeft(DC_motor *mL, DC_motor *mR)
 {
+    mL->direction = 0;
+    mR->direction = 1;
+    
+    int cur_power;
+    int turn_power=40;
+    for (cur_power=1;cur_power<=turn_power;cur_power++) {
+        mL->power = cur_power;
+        mR->power = cur_power;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(20);
+    }
 
+    for (cur_power=turn_power;cur_power>=0;cur_power--) {
+        mL->power = cur_power;
+        mR->power = cur_power;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(20);
+    }
+    LATHbits.LATH3=!LATHbits.LATH3;
 }
 
 //function to make the robot turn right 
 void turnRight(DC_motor *mL, DC_motor *mR)
 {
- 
+    mL->direction = 1;
+    mR->direction = 0;
+    
+    int cur_power;
+    int turn_power=40;
+    for (cur_power=1;cur_power<=turn_power;cur_power++) {
+        mL->power = cur_power;
+        mR->power = cur_power;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(20);
+    }
+
+    for (cur_power=turn_power;cur_power>=0;cur_power--) {
+        mL->power = cur_power;
+        mR->power = cur_power;
+        setMotorPWM(mL);
+        setMotorPWM(mR);
+        __delay_ms(20);
+    }
+    LATHbits.LATH3=!LATHbits.LATH3;
 }
 
 //function to make the robot go straight
@@ -121,16 +162,15 @@ void fullSpeedAhead(DC_motor *mL, DC_motor *mR)
     
     //Loop to slowly increase motor power
     int cur_power=0;
-    for (cur_power=0;cur_power<=100;cur_power++){
+    for (cur_power=0;cur_power<=60;cur_power++){ //to change power, change number in second expression
         mL->power=cur_power; 						//change motor power in structure
         mR->power=cur_power;
         
         setMotorPWM(mL);
         setMotorPWM(mR);
         __delay_ms(10);
-
     }
-
+    LATHbits.LATH3=!LATHbits.LATH3;
     
 }
 

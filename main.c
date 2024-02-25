@@ -38,19 +38,27 @@ void main(void){
     TRISFbits.TRISF2=1; //set TRIS value for pin (input) BUTTON 1
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin 
     
+    //Turn light on and off to debug
+    LATHbits.LATH3=0;   //set initial output state
+    TRISHbits.TRISH3=0; //set TRIS value for pin (output)
+    
     while (PORTFbits.RF2); //Wait for button press to execute movement
     __delay_ms(300);
     
     fullSpeedAhead(&motorL, &motorR);
     __delay_ms(200);
-    
-    //Turn light on and off to debug
-    LATHbits.LATH3=0;   //set initial output state
-    TRISHbits.TRISH3=0; //set TRIS value for pin (output)
-    LATHbits.LATH3=1;
-    
     stop(&motorL, &motorR);
-    LATHbits.LATH3=0;
+    __delay_ms(100);
+    turnLeft(&motorL, &motorR);
+    __delay_ms(800);
+    fullSpeedAhead(&motorL, &motorR);
     __delay_ms(200);
-    
+    stop(&motorL, &motorR);
+    __delay_ms(100);
+    turnRight(&motorL, &motorR);
+    __delay_ms(800);
+    fullSpeedAhead(&motorL, &motorR);
+    __delay_ms(200);
+    stop(&motorL, &motorR);
+    __delay_ms(100);
 }
